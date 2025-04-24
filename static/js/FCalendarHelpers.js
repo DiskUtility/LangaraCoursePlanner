@@ -49,23 +49,24 @@ function showFCalendar(FCalendar, section_object, color_class = "#9ac7f7", semes
         let e_time = times[1].slice(0, 2) + ":" + times[1].slice(2, 4)
 
         let start = null
-        if (schedule.start_date !== null)
-            start = new Date(schedule.start_date)
-        else if (courses_first_day !== null)
+        if (schedule.start) {
+            start = new Date(schedule.start)
+        } else if (courses_first_day !== null)
             start = courses_first_day
 
         let end = null
-        if (schedule.end_date !== null)
-            end = new Date(schedule.end_date)
+        if (schedule.end)
+            end = new Date(new Date(schedule.end).getTime() + 86400000) // add 24 hours
         else if (courses_last_day !== null)
-            end = new Date(courses_last_day)
+            end = courses_last_day
         else if (start !== null) 
             end = new Date(start.getTime() + 3600000 * 24 * 7 * 12) // 14 weeks in ms
         
-        if (end != null)
-            end = new Date(end.getTime() + 86400000)
-
+        // if (end != null)
+        //     end = new Date(end.getTime() + 86400000)
+        // console.log(schedule)
         //console.log(new Date(sch.start_date), sch.start_date, sch.end_date)
+        // console.log(start, end, courses_first_day, courses_last_day, schedule.start_date, schedule.end_date)
         
         let f = {
             id: schedule.id,
@@ -85,6 +86,7 @@ function showFCalendar(FCalendar, section_object, color_class = "#9ac7f7", semes
             // },
             source: "json"
         }
+        console.log(f)
 
         let FCalendar_object = FCalendar.addEvent(f)
 

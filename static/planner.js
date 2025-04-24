@@ -26,6 +26,23 @@ for (let course of courses) {
     }
 }
 
+var courses_first_day = null
+var courses_last_day = null
+
+if (year==2025 && term == 10) {
+    courses_first_day = new Date("2025-01-08")
+    courses_last_day = new Date("2025-04-04")
+} else if (year==2025 && term == 20) {
+    courses_first_day = new Date("2025-05-05") 
+    courses_last_day = new Date("2025-08-01")
+} else if (year==2025 && term == 30) {
+    courses_first_day = new Date("2025-09-02")
+    courses_last_day = new Date("2025-12-01")
+} else {
+    courses_first_day = new Date(`${year}-01-08`)
+    courses_last_day = new Date(`${year}-04-04`)
+}
+
 
 FCalendar = new FullCalendar.Calendar(document.getElementById('calendar'), {
     schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',
@@ -93,6 +110,9 @@ FCalendar = new FullCalendar.Calendar(document.getElementById('calendar'), {
     },
 
 })
+
+FCalendar.gotoDate(new Date(new Date(courses_first_day).getTime() + 604800000))
+
 
 document.addEventListener('DOMContentLoaded', function () {
     FCalendar.render();
