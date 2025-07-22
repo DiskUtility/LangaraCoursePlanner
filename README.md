@@ -29,9 +29,12 @@ Welcome to **CourSys v3** - the third iteration of the Langara Course Planner! T
 
 ### 🎯 **Smart Features**
 - **Conflict Detection**: Automatic detection of schedule conflicts
+- **Smart Schedule Optimization**: Monday-Tuesday-Thursday preference scheduling
 - **Waitlist Tracking**: Monitor course waitlists and availability
-- **Export Options**: Export your schedule to various formats
+- **Export Options**: Export your schedule to various formats (PDF, ICS, JSON)
 - **Mobile Responsive**: Plan courses on any device
+- **Dark Mode**: Toggle between light and dark themes
+- **Auto-save**: Your work is automatically saved as you plan
 
 ### 🔍 **Advanced Search & Filter**
 - **Multi-criteria Search**: Filter by subject, credits, time, instructor, and more
@@ -221,7 +224,23 @@ If you encounter SSL certificate errors during development:
 
 ---
 
+## 🚀 What's New
+
+### 🆕 Currently in Development
+- **Smart MTR Schedule Optimizer**: Advanced algorithm for optimizing Monday-Tuesday-Thursday schedules
+- **AI-Powered Course Recommendations**: Get personalized course suggestions based on your academic goals
+- **Enhanced Mobile Experience**: Improved touch interactions and mobile-first design
+- **Real-time Collaboration**: Share and collaborate on course plans with classmates
+
+---
+
 ## 📝 Changelog
+
+### v0.2.0 (In Development)
+- 🔄 **MTR Schedule Optimization**: Intelligent scheduling for Monday-Tuesday-Thursday preferences
+- 📱 **Enhanced Mobile UI**: Improved responsive design and touch interactions
+- ⚡ **Performance Improvements**: Faster loading and better caching strategies
+- 🎨 **UI/UX Enhancements**: Modern design updates and accessibility improvements
 
 ### v0.1.0 (Latest)
 - ✅ **Enhanced API Error Handling**: Comprehensive retry logic and SSL certificate management
@@ -243,6 +262,12 @@ This is the **third version** of the Langara Course Planner. Previous versions:
 ## 📄 License
 
 This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
+
+---
+
+## 👤 Maintainer
+
+- **Current Maintainer**: [@DiskUtility](https://github.com/DiskUtility) - Contact for any queries or suggestions
 
 ---
 
