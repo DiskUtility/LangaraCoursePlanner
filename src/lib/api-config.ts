@@ -32,7 +32,7 @@ export async function safeFetch(url: string, options: RequestInit = {}): Promise
       
       // Only add agent in Node.js environments (not in browser)
       if (typeof window === 'undefined' && url.startsWith('https:')) {
-        // @ts-ignore - agent property exists in Node.js RequestInit
+        // @ts-expect-error - agent property exists in Node.js RequestInit
         fetchOptions.agent = createHttpsAgent();
       }
       
@@ -99,7 +99,7 @@ export class APIError extends Error {
 export async function parseJSONResponse<T>(response: Response): Promise<T> {
   try {
     return await response.json();
-  } catch (error) {
+  } catch {
     throw new APIError(
       'Failed to parse JSON response',
       response.status,
