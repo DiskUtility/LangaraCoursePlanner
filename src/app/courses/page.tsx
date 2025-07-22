@@ -7,6 +7,7 @@ import CourseBrowser from "./course-browser";
 import { Suspense } from "react";
 import Header from "@/components/shared/header";
 import { v1IndexSubjectsResponse, v1IndexTransfersResponse, v2SearchCoursesResponse } from "@/types/Course";
+import { safeFetch, ENDPOINTS } from "@/lib/api-config";
 
 
 export const revalidate = 3600 // revalidate every hour
@@ -20,8 +21,8 @@ const _courses: {
         title: string;
     }[];
     subject_count: number;
-} = await fetch(
-    'https://api.langaracourses.ca/v1/index/courses',
+} = await safeFetch(
+    ENDPOINTS.courses.index,
     {
         cache: 'force-cache',
         next: { revalidate: 1800 } // 30 minutes
@@ -36,9 +37,9 @@ const courseList = _courses.courses.map(
 export default async function Page() {
 
   const [transfersRes, subjectsRes, coursesRes] = await Promise.all([
-    fetch('https://api.langaracourses.ca/v1/index/transfer_destinations'),
-    fetch('https://api.langaracourses.ca/v1/index/subjects'),
-    fetch('https://api.langaracourses.ca/v2/search/courses?on_langara_website=true'),
+    safeFetch(ENDPOINTS.transfers.index),
+    safeFetch(ENDPOINTS.subjects.index),
+    safeFetch(`${ENDPOINTS.courses.search}?on_langara_website=true`),
   ]);
 
   const [transfersData, subjectsData, coursesData] : [v1IndexTransfersResponse, v1IndexSubjectsResponse, v2SearchCoursesResponse] = await Promise.all([
