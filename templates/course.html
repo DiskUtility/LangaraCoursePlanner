@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{subject}} {{course_code}}: {{course_info.title}}</title>
+    <meta content="{{subject}} {{course_code}}: {{course_info.title}}" property="og:title" />
+    <meta content="Information about {{subject}} {{course_code}}: {{course_info.title}}." property="og:description" />
+    <style>
+        body {
+            background: white;
+            margin-left:20px;
+            margin-right:20px;
+            font-size: 1.1em;
+        }
+        h2 {margin-bottom: 2px;}
+        .grid {max-width:90vw; display: grid; grid: auto auto/ fit-content(100%) fit-content(100%);}
+        .sched {max-width:90vw; display: grid; grid: auto / repeat(7, fit-content(100%));}
+        div > * {border: 1px solid #000; padding-right: 5px; padding-left: 5px; padding-top:2px; padding-bottom:2px; margin: 0;}
+        iframe {width:90vw; height: 300px; padding: 10px;}
+        
+        .red {background-color: rgb(253, 167, 167);}
+        .yellow {background-color: rgb(241, 241, 162);}
+        .green {background-color: rgb(126, 198, 126);} 
+        table {
+            border-collapse: collapse;
+        }
+        table > td, tbody > * {
+            vertical-align: top;
+            text-align: left;
+        }    
+        th, td {
+            border: 1px solid #000;
+            text-align: left;
+            padding: 5px;
+        }
+                
+        #transferTable {
+            width: fit-content;
+            table-layout: fixed;
+        }
+        .tablePriority {
+            min-width: max-content;
+        }
+
+        .offeredTable {
+            width: fit-content;
+        }
+
+        .hidden {
+            display: None
+        }
+        .nomargin {
+            margin-top: 0;
+            margin-bottom: 0;
+        }
+        h1 {
+            margin-bottom: 5px;
+        }
+
+    </style>
+
+    <!-- Analytics -->
+    <script defer data-domain="planner.langaracs.ca" src="https://a.langaracs.ca/js/script.js"></script>
+    
+</head>
+<body>
+
+    <p class="nomargin"><a href="/courses">All Courses</a> > <a href="/courses/{{subject}}">{{subject}}</a> > {{subject}} {{course_code}}</p>
+    
+    {% if not course_info.on_langara_website%}
+    <h1>{{subject}} {{course_code}}
+        {% if course_info.title%}
+        : {{course_info.title}}
+        {% endif%}
+    </h2>
+    <p class="bigtext nomargin red">WARNING: This course is no longer offered by Langara. Information provided here is solely for historical purposes.</p>   
+    {% else %}
+    <h1><a href="https://langara.ca/programs-and-courses/courses/{{subject}}/{{course_code}}.html">{{subject}} {{course_code}}: {{course_info.title}}</a></h2>
+    {% endif%}
+
+    {% if course_info.desc_replacement_course %}
+        <p class="bigtext">{{ course_info.desc_replacement_course|fmt_text_with_links|safe }}</p> 
+    {% endif %}
+
+
+    {% if course_info.description %}
+        <p class="bigtext">{{ course_info.description|fmt_text_with_links|safe }}</p>
+    {% else %}
+        <p class="bigtext">Course description not available.</p>       
+    {% endif %}
+
+    {% if course_info.desc_registration_restriction %}
+        <p class="bigtext">{{ course_info.desc_registration_restriction }}</p> 
+    {% endif %}
+    {% if course_info.desc_duplicate_credit %}
+        <p class="bigtext">{{ course_info.desc_duplicate_credit|fmt_text_with_links|safe }}</p> 
+    {% endif %}
+    {% if course_info.desc_prerequisite %}
+        <p class="bigtext">{{ course_info.desc_prerequisite|fmt_text_with_links|safe }}</p> 
+    {% endif %}
+
+
+    <h2>Course Information:</h2>
+
+    <div class="grid">
+        <p>Credits:</p><p>{{ course_info.credits }}</p>
+        {# <p>Title:</p><p>{{ course_info.title }}</p> #}
+        {# TODO: NEEDS TO BE ADDED TO API#}
+        <p>Additional Fees:</p><p>
+            {% if course_info.add_fees != None %}${% endif%}{{ course_info.add_fees }}</p>
+        <p>Repeat Limit:</p><p>{{ course_info.rpt_limit }}</p>
+        <p>Lecture Hours:</p><p>{{ course_info.hours_lecture }}</p>
+        <p>Seminar Hours:</p><p>{{ course_info.hours_seminar }}</p>
+        <p>Lab Hours:</p><p>{{ course_info.hours_lab }}</p>
+
+        <p>Offered online:</p><p>{{course_info.offered_online|format_attribute}}</p>
+
+        <p>Course outline(s):</p>   
+        {% if outlines%}
+            <p>
+            {% for outline in outlines %}
+                <a href={{outline.url}} target="_blank">{{outline.file_name}}</a><br>
+            {% endfor %}
+            </p>
+        {% else %}
+            <p>None</p>
+        {% endif%}
+        
+        {# <p>Notes:</p><p>{{ course_info.notes }}</p> #}
+    </div>
+
+    <br>
+
+    <table>
+        <tr>
+            <th class="{{ course_info.attr_ar|attr_color }}" title="Meets second-year arts requirement.">2AR</th>
+            <th class="{{ course_info.attr_sc|attr_color }}" title="Meets second-year science requirement">2SC</th>
+            <th class="{{ course_info.attr_hum|attr_color }}" title="Meets humanities requirement">HUM</th>
+            <th class="{{ course_info.attr_lsc|attr_color }}" title="Meets lab-science requirement">LSC</th>
+            <th class="{{ course_info.attr_sci|attr_color }}" title="Meets science requirement">SCI</th>
+            <th class="{{ course_info.attr_soc|attr_color }}" title="Meets social science requirement">SOC</th>
+            <th class="{{ course_info.attr_ut|attr_color }}" title='Meets "university-transferable" requirements. Course transfers to at least one of UBC, UBCO, SFU, UVIC, and UNBC'>UT</th>
+        </tr>
+        <tr>
+            <td class="{{ course_info.attr_ar|attr_color }}">{{ course_info.attr_ar|format_attribute }}</td>
+            <td class="{{ course_info.attr_sc|attr_color }}">{{ course_info.attr_sc|format_attribute }}</td>
+            <td class="{{ course_info.attr_hum|attr_color }}">{{ course_info.attr_hum|format_attribute }}</td>
+            <td class="{{ course_info.attr_lsc|attr_color }}">{{ course_info.attr_lsc|format_attribute }}</td>
+            <td class="{{ course_info.attr_sci|attr_color }}">{{ course_info.attr_sci|format_attribute }}</td>
+            <td class="{{ course_info.attr_soc|attr_color }}">{{ course_info.attr_soc|format_attribute }}</td>
+            <td class="{{ course_info.attr_ut|attr_color }}">{{ course_info.attr_ut|format_attribute }}</td>
+        </tr>
+    </table>
+
+    <h2>Transfers:</h2>
+    {% if transfers %}
+        <table class="transferTable"> 
+            <thead>
+                <tr>
+                    <th>Course</th>
+                    <th>Destination</th>
+                    <th>Credit</th>
+                    <th>Start/End</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for transfer in transfers %}
+                    {% set classes = [] %}
+                    
+                    {% if transfer.credit == "No credit" or transfer.credit == "No Credit" %}
+                        {% set _ = classes.append("red") %}
+                    {% endif %}
+                    {% if transfer.credit == "Individual assessment." %}
+                        {% set _ = classes.append("yellow") %}
+                    {% else %}
+                        {% set credit_val = transfer.credit.split("(")[-1].split(")")[0] %}
+                        {% if credit_val|float < course_info.credits|float %}
+                            {% set _ = classes.append("yellow") %}
+                        {% endif %}
+                    {% endif %}
+                    <tr class="{{ classes|join(' ') }} {{ transfer.source }}">
+                        <td class="tablePriority">{{ transfer.subject }} {{ transfer.course_code }}</td>
+                        <td class="tablePriority"><a href="/transfers/{{transfer.destination}}">{{ transfer.destination }}</a></td>
+                        {% if transfer.condition %}
+                            <td>{{ transfer.credit }} {{transfer.condition}}</td>
+                        {% else %}
+                            <td>{{ transfer.credit }}</td>
+                        {% endif %}
+                        <td class="tablePriority">{{ transfer.effective_start }} to Present</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No active transfer agreements found.</p>
+    {% endif %}
+
+    <h2>Inactive Transfers:</h2>
+    {% if inactive_transfers %}
+        <table class="transferTable"> 
+            <thead>
+                <tr>
+                    <th>Course</th>
+                    <th>Destination</th>
+                    <th>Credit</th>
+                    <th>Start/End</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for transfer in inactive_transfers %}
+                    {% set classes = [] %}
+                    {% if transfer.credit == "No credit" or transfer.credit == "No Credit" %}
+                        {% set _ = classes.append("red") %}
+                    {% endif %}
+                    {% if transfer.credit == "Individual assessment." %}
+                        {% set _ = classes.append("yellow") %}
+                    {% else %}
+                        {% set credit_val = transfer.credit.split("(")[-1].split(")")[0] %}
+                        {% if credit_val|float < course_info.credits|float %}
+                            {% set _ = classes.append("yellow") %}
+                        {% endif %}
+                    {% endif %}
+                    <tr class="{{ classes|join(' ') }} {{ transfer.source }}">
+                        <td class="tablePriority">{{ transfer.subject }} {{ transfer.course_code }}</td>
+                        <td class="tablePriority"><a href="/transfer/{{transfer.destination}}">{{ transfer.destination }}</a></td>
+                        {% if transfer.condition %}
+                            <td>{{ transfer.credit }} {{transfer.condition}}</td>
+                        {% else %}
+                            <td>{{ transfer.credit }}</td>
+                        {% endif %}
+                        <td class="tablePriority">{{ transfer.effective_start }} to {{ transfer.effective_end }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No inactive transfer agreements found.</p>
+    {% endif %}
+
+    <h2>Current Offerings:</h2>
+    {% if current_offerings %}
+        <table class="offeredTable mono"> 
+            <thead>
+                <th>Semester</th> 
+                <th>CRN</th>
+                <th>Section</th>
+                <th>Seats</th> 
+                <th>Waitlist</th> 
+                <th>Days</th> 
+                <th>Time</th> 
+                <th>Room</th> 
+                <th>Type</th> 
+                <th>Instructor</th>
+            </thead>
+            <tbody>
+                {% for offering in current_offerings %}
+                    {% set schedule_length = offering.schedule|length %}
+                    {% for schedule in offering.schedule %}
+                        <tr>
+                            {% if loop.first %}
+                                <td rowspan="{{ schedule_length }}">{{ offering.year }} {{ offering.term }}</td>
+                                <td rowspan="{{ schedule_length }}">{{ offering.crn }}</td>
+                                <td rowspan="{{ schedule_length }}">{{ offering.section }}</td>
+                                <td rowspan="{{ schedule_length }}">{{ offering.seats|default('N/A', true) }}</td>
+                                <td rowspan="{{ schedule_length }}">{{ offering.waitlist|default('N/A', true) }}</td>
+                            {% endif %}
+                            <td>{{ schedule.days }}</td>
+                            <td>{{ schedule.time }}</td>
+                            <td>{{ schedule.room }}</td>
+                            <td>{{ schedule.type }}</td>
+                            <td>{{ schedule.instructor }}</td>
+                        </tr>
+                    {% endfor %}
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No offerings found for this semester ({{ current_term.year }} {{ current_term.term }}).</p>
+    {% endif %}
+
+
+
+    <h2>Previous Offerings:</h2>
+    {% if offerings %}
+    <table class="offeredTable mono"> 
+        <thead><th>Semester</th> <!--<th>Section</th>--> <th>Seats</th> <th>Waitlist</th> <th>Days</th> <th>Time</th> <th>Room</th> <th>Type</th> <th>Instructor</th></thead>
+        {% for offering in offerings %}
+            {% set schedule_length = offering.schedule|length %}
+            {% for schedule in offering.schedule %}
+                <tr>
+                    {% if loop.first %}
+                        <td rowspan="{{ schedule_length }}">{{ offering.year }} {{ offering.term }}</td>
+                        <!--<td rowspan="{{ schedule_length }}">{{ offering.section }}</td>-->
+                        <td rowspan="{{ schedule_length }}">{{ offering.seats|default('N/A', true) }}</td>
+                        <td rowspan="{{ schedule_length }}">{{ offering.waitlist|default('N/A', true) }}</td>
+                    {% endif %}
+                    <td>{{ schedule.days }}</td>
+                    <td>{{ schedule.time }}</td>
+                    <td>{{ schedule.room }}</td>
+                    <td>{{ schedule.type }}</td>
+                    <td>{{ schedule.instructor }}</td>
+                </tr>
+            {% endfor %}
+        {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <p>No previous offerings found.</p>
+    {% endif %}
+
+</body>
+</html>

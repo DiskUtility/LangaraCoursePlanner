@@ -1,19 +1,41 @@
-# CourSys
+# Langara Course Planner
 
-Welcome to the third version of the Langara Course Planner!
+Welcome to the Langara Course Planner!
 
-You can find the previous version at [https://github.com/langaracpsc/LangaraCoursePlanner](https://github.com/langaracpsc/LangaraCoursePlanner).
+This is a comprehensive course planning tool for Langara College students, combining both Next.js frontend and Flask backend components.
 
-This is a completely free and open source tool to help you plan your courses at Langara College. You can find more information at the [about](planner.langaracs.ca/about) page.
+## About
+
+This is a completely free and open source tool to help you plan your courses at Langara College. The project has evolved through multiple versions:
+
+- Previous version: [https://github.com/langaracpsc/LangaraCoursePlanner](https://github.com/langaracpsc/LangaraCoursePlanner)
+- Current version: [https://github.com/langaracpsc/coursys](https://github.com/langaracpsc/coursys)
 
 This project is made possible by LangaraCourseWatcher, a REST API that provides information on Langara courses. You can find more information [here](https://github.com/langaracpsc/LangaraCourseWatcher).
 
-### Development
-`yarn install`
-`yarn dev`
+## Features
 
-### Build
-build the given Dockerfile
+- Course scheduling optimization
+- Monday-Tuesday-Thursday schedule preferences
+- Smart scheduling algorithms
+- Course planning and tracking
 
-### Acknowledgements
+## Development
+
+### Next.js Frontend
+```bash
+yarn install
+yarn dev
+```
+
+### Flask Backend
+The Flask backend serves static pages and provides course information endpoints.
+
+## Build
+Build using the provided Dockerfile for containerized deployment.
+
+## Contact
+Please contact Highfire1 if you have any questions or suggestions or would like to contribute.
+
+## Acknowledgements
 - Some inspiration taken from the [CourSys](https://coursys.sfu.ca/browse) system at Simon Fraser University.

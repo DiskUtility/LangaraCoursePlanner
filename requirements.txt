@@ -1,0 +1,5 @@
+flask
+flask-compress
+requests
+waitress
+requests-cache

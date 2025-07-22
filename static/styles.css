@@ -1,0 +1,318 @@
+/* montserrat-regular - latin */
+@font-face {
+    font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: 400;
+    src: url('libraries/montserrat/montserrat-v26-latin-regular.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+} 
+
+:root {
+    --background-color: white;
+    --sidebar-color: rgba(245, 245, 245, 0.971);
+    --color: black;
+
+    --fc-event-text-color: black;
+    --sidebar-item-color: #e4dcfd;
+}
+
+.dark-mode {
+    --background-color: #1F1F1F;
+    --sidebar-color: #454545;
+    --color: #f2f2f2;
+}
+
+
+p {
+    margin: 2px;
+}
+
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    font-size: small;
+    margin: 0;
+    padding: 0;
+    background-color: var(--background-color);
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+    overflow-x: hidden;
+
+    color: var(--color);
+}
+
+.fc-event {
+    font-size: 1em;
+}
+
+.container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin: 0;
+    flex: 1;
+
+    padding: 0;    
+}
+
+.sidebar {
+    padding: 0;
+    margin: 0;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+    border-radius: 5px;
+
+    height: 100vh;
+    max-height: calc(100vh - 24px);
+
+    resize: horizontal; /* Enable horizontal resizing */
+    overflow: auto;
+    width: 26vw;
+    max-width: 1000px;
+    min-width: 200px;
+
+    padding: 12px;
+    gap:8px;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar > div {
+    height: 100%; /* idek */
+    display: flex;
+    gap: 5px;
+    flex-direction: column;
+}
+
+input[type=text] {
+    width: calc(100% - 16px); /* idek */
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: medium;
+    font-family:inherit;
+}
+
+.search-options {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+
+.button-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+/* Make the course list scrollable if it overflows */
+.sidebarlist {
+    overflow-y: auto;
+    flex-grow: 1;
+    background-color: var(--sidebar-color);
+    border-radius: 5px;
+    flex-basis: 0;
+}
+
+
+.csidebar {
+    padding: 2px;
+    margin: 5px;
+    background-color: var(--sidebar-item-color);
+    border: 1px solid var(--background-color);
+    border-radius: 5px;
+    color: black;
+}
+
+a.fc-event {
+    color: black
+}
+
+.csidebar * {
+    padding: 0px;
+    margin: 2px;
+}
+
+.section {
+    margin-bottom: 10px;
+    padding: 2px;
+}
+
+h3 {
+    width: fit-content;
+    margin: 0;
+}
+
+h3 > a:hover {
+    text-decoration: underline;
+    color: #0645AD;
+}
+
+.savediv > div > h3:hover {
+    color: black;
+    text-decoration: none;
+}
+
+.savediv > div > h3 > span:first-child:hover {
+    color: black;
+    text-decoration: none;
+    box-shadow:inset 0px 0px 0px 1.5px rgb(87, 87, 87);
+    border-radius: 2px;
+}
+
+.footer {
+    margin: 5px;
+    margin-bottom: 0;
+    text-align: center;
+    flex-shrink: 1000;
+}
+
+footer.dark-mode > a {
+    color: #9ac7f7;
+}
+
+footer.dark-mode > a:visited {
+    color: #c9a8f3;
+}
+
+.calendar {
+    width: 100%;
+    margin: 10px;
+    overflow-y: auto; /* Make the calendar div scrollable if it overflows */
+    height: calc( 100vh - 20px );
+}
+
+#calendar {
+    height: 100%;
+}
+
+
+.red {
+    background-color: rgb(229, 168, 168);
+}
+
+.yellow {
+    background-color: rgb(252, 252, 179);
+}
+
+.green {
+    background-color: rgb(189, 237, 189);
+}
+
+.gray {
+    background-color: #f7f7f7;
+    border: 1px solid #ddd;
+}
+
+.dark-gray {
+    background-color: #b7b2b2;
+}
+
+.blue {
+    background-color: #9ac7f7 !important;
+    /* border: 1px solid #ddd; */
+}
+
+.hidden {
+    display: none !important;
+}
+
+
+.header-button-bar {
+    margin: 0;
+    padding: 0;
+    display:flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 2px;
+    border: 0;
+    width:auto;
+}
+
+.header-button-bar > label > input{
+    background-color: lightgray;
+    display: inline-block;
+    border: none;
+    margin: 0;
+    font-size:small;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bold;
+    margin: 0px;
+    padding: 5px;
+    border-radius: 10px;
+}
+
+fieldset {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.savediv {
+    display: flex;
+    flex-direction: row;
+    align-items: normal;
+    align-self: start;  
+    justify-content: space-between;
+}
+
+.sidebarlist > div:hover {
+    background-color: #9a9a9a;
+    cursor: pointer;
+}
+
+.savediv > div {
+    cursor: pointer;
+    flex-grow: 1;
+}
+
+.savediv > img {
+    width: 25px;
+    align-self: start;  
+    padding: 5px;
+    cursor: pointer; /* Change cursor to a pointer on hover */
+    transition: transform 0.2s; /* Add a smooth transition for scaling effect */
+}
+
+.savediv > img:hover {
+    transform: scale(1.2); 
+}
+
+#saveScheduleFieldset {
+    display: flex;
+    flex-direction: row;
+}
+
+#saveScheduleFieldset > * {
+    font-size: medium;
+    font-family:inherit;
+}
+
+.buttonSelected {
+    background-color: #9ac7f7 !important;
+}
+
+.hidenotes > div > .notes {
+    display: none;
+}
+
+
+
+.fc-event-title-container {
+    container-type: size;
+    overflow: hidden;
+}
+
+.fc-event {
+    overflow: hidden;
+}
+
+a.cl{
+    all: unset;
+}
+
+#betterSaveButton {
+    padding: 10px;
+}

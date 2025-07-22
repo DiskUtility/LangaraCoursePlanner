@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transfer Destinations</title>
+    <meta content="Course transfer destinations from Langara College." property="og:title" />
+    <meta content="All Course transfer destinations from Langara College." property="og:description" />
+    <style>
+        body {
+            background: white;
+            margin-left:20px;
+            margin-right:20px;
+            font-size: 1.1em;
+        }
+        h2 {margin-bottom: 2px;}
+        .grid {max-width:90vw; display: grid; grid: auto auto/ fit-content(100%) fit-content(100%);}
+        .sched {max-width:90vw; display: grid; grid: auto / repeat(7, fit-content(100%));}
+        div > * {border: 1px solid #000; padding-right: 5px; padding-left: 5px; padding-top:2px; padding-bottom:2px; margin: 0;}
+        iframe {width:90vw; height: 300px; padding: 10px;}
+        
+        .red {background-color: rgb(253, 167, 167);}
+        .yellow {background-color: rgb(241, 241, 162);}
+        .green {background-color: rgb(126, 198, 126);} 
+        table {
+            border-collapse: collapse;
+        }
+        table > td, tbody > * {
+            vertical-align: top;
+            text-align: left;
+        }    
+        th, td {
+            border: 1px solid #000;
+            text-align: left;
+            padding: 5px;
+        }
+        td {
+            width: fit-content;
+        }
+                
+        .offeredTable {
+            width: fit-content;
+        }
+
+        .hidden {
+            display: None
+        }
+
+        .nomargin {
+            margin-top: 0;
+            margin-bottom: 0;
+        }
+        h1 {
+            margin-bottom: 5px;
+        }
+
+    </style>
+
+    <!-- Analytics -->
+    <script defer data-domain="planner.langaracs.ca" src="https://a.langaracs.ca/js/script.js"></script>
+
+</head>
+<body>
+    <p class="nomargin">All Transfers > </p>
+    <h1>All Transfer Destinations</h1>
+
+    <table id="transferTable">
+        <thead>
+            <tr>
+                <th>Code</th>
+                <th>Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for transfer in transfers %}
+            <tr>
+                <td><a href="/transfers/{{ transfer.code }}">{{ transfer.code }}</a></td>
+                <td>{{ transfer.name }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</body>
+
+</html>
