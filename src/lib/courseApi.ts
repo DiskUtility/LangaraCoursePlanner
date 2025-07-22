@@ -7,34 +7,45 @@ import {
   SectionResponse,
   Section 
 } from '@/types/Planner';
-
-const API_BASE_URL = 'https://api.langaracourses.ca';
+import { safeFetch, parseJSONResponse, APIError, API_BASE_URL } from './api-config';
 
 export class CourseAPI {
   static async getLatestSemester(): Promise<Semester> {
-    const response = await fetch(`${API_BASE_URL}/v1/index/latest_semester`);
-    if (!response.ok) {
-      throw new Error('Failed to fetch latest semester');
+    try {
+      const response = await safeFetch(`${API_BASE_URL}/v1/index/latest_semester`);
+      return await parseJSONResponse<Semester>(response);
+    } catch (error) {
+      if (error instanceof APIError) {
+        throw new Error(`Failed to fetch latest semester: ${error.message}`);
+      }
+      throw new Error('Failed to fetch latest semester: Network error');
     }
-    return response.json();
   }
 
   static async getAllSemesters(): Promise<Semester[]> {
-    const response = await fetch(`${API_BASE_URL}/v1/index/semesters`);
-    if (!response.ok) {
-      throw new Error('Failed to fetch semesters');
+    try {
+      const response = await safeFetch(`${API_BASE_URL}/v1/index/semesters`);
+      const data: SemesterResponse = await parseJSONResponse<SemesterResponse>(response);
+      return data.semesters;
+    } catch (error) {
+      if (error instanceof APIError) {
+        throw new Error(`Failed to fetch semesters: ${error.message}`);
+      }
+      throw new Error('Failed to fetch semesters: Network error');
     }
-    const data: SemesterResponse = await response.json();
-    return data.semesters;
   }
 
   static async getSections(year: number, term: number): Promise<Section[]> {
-    const response = await fetch(`${API_BASE_URL}/v1/semester/${year}/${term}/sections`);
-    if (!response.ok) {
-      throw new Error('Failed to fetch sections');
+    try {
+      const response = await safeFetch(`${API_BASE_URL}/v1/semester/${year}/${term}/sections`);
+      const data: SectionResponse = await parseJSONResponse<SectionResponse>(response);
+      return data.sections;
+    } catch (error) {
+      if (error instanceof APIError) {
+        throw new Error(`Failed to fetch sections: ${error.message}`);
+      }
+      throw new Error('Failed to fetch sections: Network error');
     }
-    const data: SectionResponse = await response.json();
-    return data.sections;
   }
 
   static async searchSections(
@@ -47,11 +58,15 @@ export class CourseAPI {
     if (year) params.append('year', year.toString());
     if (term) params.append('term', term.toString());
 
-    const response = await fetch(`${API_BASE_URL}/v1/search/sections?${params.toString()}`);
-    if (!response.ok) {
-      throw new Error('Failed to search sections');
+    try {
+      const response = await safeFetch(`${API_BASE_URL}/v1/search/sections?${params.toString()}`);
+      return await parseJSONResponse<SearchSectionResponse>(response);
+    } catch (error) {
+      if (error instanceof APIError) {
+        throw new Error(`Failed to search sections: ${error.message}`);
+      }
+      throw new Error('Failed to search sections: Network error');
     }
-    return response.json();
   }
 
   static termToSeason(term: number): string {

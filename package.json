@@ -3,8 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
-    "build": "next build",
+    "dev": "NODE_TLS_REJECT_UNAUTHORIZED=0 next dev --turbopack",
+    "build": "NODE_TLS_REJECT_UNAUTHORIZED=0 next build",
+    "build:prod": "next build",
     "start": "next start",
     "lint": "next lint"
   },

@@ -1,5 +1,6 @@
 import { addLinksToCourseDescription } from '@/lib/course-utils';
 import { Course, Transfer } from '@/types/Course';
+import { safeFetch, parseJSONResponse } from '@/lib/api-config';
 import Link from 'next/link';
 
 const _courses: {
@@ -11,13 +12,13 @@ const _courses: {
         title: string;
     }[];
     subject_count: number;
-} = await fetch(
+} = await safeFetch(
     'https://api.langaracourses.ca/v1/index/courses',
     {
         cache: 'force-cache',
         next: { revalidate: 1800 } // 30 minutes
     }
-).then((res) => res.json());
+).then((res) => parseJSONResponse(res));
 
 const courseList = _courses.courses.map(
     (c) => `${c.subject}-${c.course_code}`.toLowerCase()

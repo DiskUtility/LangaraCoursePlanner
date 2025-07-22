@@ -7,56 +7,87 @@ import {
   SectionsApiResponse,
   Section
 } from '@/types/Planner2';
+import { safeFetch, parseJSONResponse, APIError, API_BASE_URL } from './api-config';
 
-const API_BASE = 'https://api.langaracourses.ca';
+const API_BASE = API_BASE_URL;
 
 export const plannerApi = {
   // Get courses and sections for a specific semester
   getCoursesForSemester: async (year: number, term: number): Promise<PlannerApiResponse> => {
-    const coursesRes = await fetch(`${API_BASE}/v1/semester/${year}/${term}/courses`);
-    const sectionsRes = await fetch(`${API_BASE}/v1/semester/${year}/${term}/sections`);
+    try {
+      const [coursesRes, sectionsRes] = await Promise.all([
+        safeFetch(`${API_BASE}/v1/semester/${year}/${term}/courses`),
+        safeFetch(`${API_BASE}/v1/semester/${year}/${term}/sections`)
+      ]);
 
-    const [coursesData, sectionsData]: [CoursesApiResponse, SectionsApiResponse] = await Promise.all([
-      coursesRes.json(),
-      sectionsRes.json()
-    ]);
+      const [coursesData, sectionsData]: [CoursesApiResponse, SectionsApiResponse] = await Promise.all([
+        parseJSONResponse<CoursesApiResponse>(coursesRes),
+        parseJSONResponse<SectionsApiResponse>(sectionsRes)
+      ]);
 
-    // Map sections to courses like in the original Flask code
-    const sectionsDict: { [key: string]: Section[] } = {};
+      // Map sections to courses like in the original Flask code
+      const sectionsDict: { [key: string]: Section[] } = {};
 
-    for (const section of sectionsData.sections) {
-      const key = `${section.subject}-${section.course_code}`;
-      if (!sectionsDict[key]) {
-        sectionsDict[key] = [];
+      for (const section of sectionsData.sections) {
+        const key = `${section.subject}-${section.course_code}`;
+        if (!sectionsDict[key]) {
+          sectionsDict[key] = [];
+        }
+        sectionsDict[key].push(section);
       }
-      sectionsDict[key].push(section);
+
+      // Add sections to courses
+      const coursesWithSections = coursesData.courses.map(course => ({
+        ...course,
+        sections: sectionsDict[`${course.subject}-${course.course_code}`] ?? []
+      }));
+
+      return { courses: coursesWithSections };
+    } catch (error) {
+      if (error instanceof APIError) {
+        throw new Error(`Failed to fetch semester data: ${error.message}`);
+      }
+      throw new Error('Failed to fetch semester data: Network error');
     }
-
-    // Add sections to courses
-    const coursesWithSections = coursesData.courses.map(course => ({
-      ...course,
-      sections: sectionsDict[`${course.subject}-${course.course_code}`] ?? []
-    }));
-
-    return { courses: coursesWithSections };
   },
 
   // Get available semesters
   getSemesters: async (): Promise<SemestersResponse> => {
-    const response = await fetch(`${API_BASE}/v1/index/semesters`);
-    return response.json();
+    try {
+      const response = await safeFetch(`${API_BASE}/v1/index/semesters`);
+      return await parseJSONResponse<SemestersResponse>(response);
+    } catch (error) {
+      if (error instanceof APIError) {
+        throw new Error(`Failed to fetch semesters: ${error.message}`);
+      }
+      throw new Error('Failed to fetch semesters: Network error');
+    }
   },
 
   // Get latest semester
   getLatestSemester: async (): Promise<LatestSemesterResponse> => {
-    const response = await fetch(`${API_BASE}/v1/index/latest_semester`);
-    return response.json();
+    try {
+      const response = await safeFetch(`${API_BASE}/v1/index/latest_semester`);
+      return await parseJSONResponse<LatestSemesterResponse>(response);
+    } catch (error) {
+      if (error instanceof APIError) {
+        throw new Error(`Failed to fetch latest semester: ${error.message}`);
+      }
+      throw new Error('Failed to fetch latest semester: Network error');
+    }
   },
 
   // Search sections
   searchSections: async (query: string, year: number, term: number): Promise<SectionsSearchResponse> => {
-    const response = await fetch(`${API_BASE}/v1/search/sections?query=${query}&year=${year}&term=${term}`);
-    return response.json();
+    try {
+      const response = await safeFetch(`${API_BASE}/v1/search/sections?query=${query}&year=${year}&term=${term}`);
+      return await parseJSONResponse<SectionsSearchResponse>(response);
+    } catch (error) {
+      if (error instanceof APIError) {
+        throw new Error(`Failed to search sections: ${error.message}`);
+      }
+      throw new Error('Failed to search sections: Network error');
+    }
   }
 };
 
